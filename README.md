@@ -1,5 +1,4 @@
-# Public data, code, and notebooks for paper analyzing "Extended WIYN Survey" and the
-fractions of barred S0-Sc galaxies with inner bars and nuclear rings.
+# Public data, code, and notebooks for paper analyzing inner bars and nuclear rings
 
 <!-- 
 This git repository contains data files, Python code, and Python and R 
@@ -12,8 +11,10 @@ Society*, in press).
 
 ![Trends](./composite_fig_for_github.png)
 
-Left: fractions of S0-Sc galaxies with inner bars or nuclear rings, counting all
-barred galaxies (top) or barred + unbarred galaxies (bottom).
+Left: fractions of S0-Sc galaxies with inner bars (black squares) or nuclear rings
+(open blue circles), counting all
+barred galaxies (top) or barred + unbarred galaxies (bottom; red circles = fraction
+of galaxies with bars).
 Right: Trends in bar semi-major axis versus galaxy stellar mass.
 
 <!-- [![DOI](https://zenodo.org/badge/579425923.svg)](https://zenodo.org/badge/latestdoi/579425923) -->
