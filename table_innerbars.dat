@@ -1,0 +1,43 @@
+This table contains measurements for inner bars of double-barred galaxies. See Table 2
+in the paper for a short, formatted version with caption.
+
+--------------------------------------------------------------------------------
+   Bytes Format Units   Label        Explanations
+--------------------------------------------------------------------------------
+   1-  7  A8    ---     Name         Galaxy Name
+  11- 13  I3    deg     PA           Position angle of inner bar on sky
+  16- 18  F5.1  arcsec  amax         Maximum-ellipticity radius of inner bar
+  21- 23  F5.1  arcsec  Lbar         Inner-bar upper-limit radius
+  26- 29  F3.2  ---     emax         Maximum ellipticity of inner bar
+--------------------------------------------------------------------------------
+NGC 718    15  1.6  2.2  0.19
+NGC 1068   47  15   17   0.45
+NGC 2681   20  1.7  3.3  0.26
+NGC 2859   62  4.1  6.2  0.31
+NGC 2950   85  3.2  3.9  0.33
+NGC 3031  140  17   27   0.39
+NGC 3368  129  3.4  5.0  0.35
+NGC 3458    3  0.8  1.5  0.17
+NGC 3626  169  2.5  4.8  0.48
+NGC 3941   35  3.2  4.4  0.21
+NGC 3945   90  2.6  3.0  0.11
+NGC 3992   68  6.2  8.3  0.38
+NGC 4245  129  2.9  3.8  0.20
+NGC 4250  159  3.3  4.5  0.29
+NGC 4303   40  1.8  2.5  0.29
+NGC 4314  136  4.5  5.6  0.23
+NGC 4321  110  8.2  10   0.62
+NGC 4340   25  3.4  4.5  0.11
+NGC 4450   49  2.0  2.2  0.08
+NGC 4457   68  3.2  3.8  0.32
+NGC 4548  105  2.7  4.4  0.21
+NGC 4725  141  5.6  6.8  0.20
+NGC 4736   25  11   20   0.22
+NGC 4750   61  2.3  2.9  0.28
+NGC 4754   22  6.7  9.4  0.23
+NGC 4941  172  3.2  3.9  0.41
+NGC 5740  165  1.1  2.6  0.46
+NGC 5770   76  2.0  2.6  0.09
+NGC 5806  132  2.2  2.6  0.40
+NGC 5850   50  6.1  7.1  0.34
+NGC 7280  115  1.2  1.6  0.30
