@@ -23,6 +23,15 @@ Right: Trends in bar semi-major axis versus galaxy stellar mass.
 
 ## Data
 
+The following data files are included:
+
+   * `table_mainsample.dat` -- General galaxy and bar data for full (156-galaxy) sample
+    of barred galaxies
+    
+   * `table_innerbars.dat` -- Measurements of inner bars in double-barred galaxies
+
+   * `table_nuclearrings.dat` -- Measurements of nuclear rings
+
 
 ## Dependencies
 
