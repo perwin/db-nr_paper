@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
-import s4gutils
+import dbnr_utils
 
 
 
@@ -67,7 +67,7 @@ def PlotFrequency( values, i_1, i_non1, start, stop, step, offset=0, noErase=Fal
 		if n1[i] + n2[i] == 0:
 			f = f_low = f_high = np.nan
 		else:
-			f,f_low,f_high = s4gutils.Binomial(n1[i], n1[i] + n2[i])
+			f,f_low,f_high = dbnr_utils.Binomial(n1[i], n1[i] + n2[i])
 		ff.append(f)
 		ff_low.append(f_low)
 		ff_high.append(f_high)

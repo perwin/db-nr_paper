@@ -317,6 +317,9 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
         nrPAs.append(ringPA)
         nrAmaxs.append(a_ring)
         nrEmaxs.append(emax)
+        # treat NGC 718's "blue" ring as SF
+        if ring_class == "blue":
+            ring_class = "star-forming"
         ringClasses.append(ring_class)
 
     # deproject amax and a_ring values for bars and NRs, convert to kpc
@@ -328,10 +331,11 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
     dataList = [ np.array(gnames), np.array(distances), np.array(logmstars),
                 np.array(diskPAs), np.array(incs), np.array(barPAs), np.array(amaxs), 
                 np.array(lbars), np.array(emaxs), np.array(dbFlags), np.array(nrFlags), 
-                np.array(amax_dp_kpcs), np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs) ]
+                np.array(amax_dp_kpcs), np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs),
+                np.array(ringClasses) ]
     colNames = ["name", "dist", "logmstar", "diskPA", "inclination", "barPA", "amax",
                 "Lbar", "emax", "dbFlag", "nrFlag", "amax_dp_kpc", "amax2_dp_kpc", 
-                "nr_dp_kpc"]    
+                "nr_dp_kpc", "nr_class"]    
     df = du.ListDataFrame(dataList, colNames)
     
     return (df, gname_rowdict)
