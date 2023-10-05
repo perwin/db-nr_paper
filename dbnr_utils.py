@@ -116,7 +116,7 @@ def MungeName( gname_full ):
     return newname
 
 
-def GetDBdict( fname = baseDir_pub+"table_innerbars.dat" ):
+def GetDBdict( fname = "table_innerbars.dat", baseDir="" ):
     """
     Returns a dict mapping names of double-barred galaxies to list of observed
     inner-bar measurements.
@@ -124,7 +124,10 @@ def GetDBdict( fname = baseDir_pub+"table_innerbars.dat" ):
     Parameters
     ----------
     fname : str
-        path to filename holding inner-bar data
+        filename holding inner-bar data
+    
+    baseDir : str
+        path to directory containing fname
     
     Returns
     -------
@@ -132,7 +135,8 @@ def GetDBdict( fname = baseDir_pub+"table_innerbars.dat" ):
         maps (munged) galaxy name (e.g., "NGC0718") to list of values for inner bar:
             [barPA, amax, Lbar, emax] : all float
     """
-    lines = open(fname).readlines()
+    filePath = baseDir + "/" + fname
+    lines = open(filePath).readlines()
     dlines = lines[12:]
     dbDict = {}
     for line in dlines:
@@ -146,7 +150,7 @@ def GetDBdict( fname = baseDir_pub+"table_innerbars.dat" ):
     return dbDict
 
 
-def GetNRdict( fname = baseDir_pub+"table_nuclearrings.dat" ):
+def GetNRdict( fname = "table_nuclearrings.dat", baseDir="" ):
     """
     Returns a dict mapping names of nuclear-ring galaxies to list of observed
     nuclear-ring measurements.
@@ -156,14 +160,17 @@ def GetNRdict( fname = baseDir_pub+"table_nuclearrings.dat" ):
     fname : str
         path to filename holding nuclear-ring data
     
+    baseDir : str
+        path to directory containing fname
+    
     Returns
     -------
     nrbar_dict : dict
         maps (munged) galaxy name (e.g., "NGC0718") to list of values for nuclear:
             [nrPA, a_ring, emax_ring, ring-class] : [float, float, float, str]
     """
-    
-    lines = open(fname).readlines()
+    filePath = baseDir + "/" + fname
+    lines = open(filePath).readlines()
     dlines = lines[13:]
     nrDict = {}
     for line in dlines:
@@ -213,7 +220,7 @@ def DeprojectSizes_kpc( objectSizes, objectPAs, diskPAs, inclinations, distances
     
 
 
-def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
+def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     """
     Reads in general data, including outer/single bar measurements for all the barred
     galaxies; also adds inner-bar and nuclear-ring measurements and deprojected
@@ -225,6 +232,9 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
     fname : str
         path to filename holding barred-galaxy data
     
+    baseDir : str
+        path to directory containing fname
+    
     Returns
     -------
     df = datautils.ListDataFrame
@@ -233,7 +243,9 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
     gname_rowdict : dict
         maps (munged) galaxy name to (0-based) row number in data frame
     """
-    lines = open(fname).readlines()
+    filePath = baseDir + "/" + fname
+    
+    lines = open(filePath).readlines()
     dlines = lines[30:]
     
     gnames = []
@@ -297,7 +309,7 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
         i += 1
     
     # add DB data
-    dbDict = GetDBdict()
+    dbDict = GetDBdict(baseDir=baseDir)
     for gname in gnames:
         if gname in dbDict:
             barPA, amax, Lbar, emax = dbDict[gname]
@@ -308,7 +320,7 @@ def GetBarredGalaxyData( fname=baseDir_pub+"table_mainsample.dat" ):
         innerBarLbars.append(Lbar)
         innerBarEmaxs.append(emax)
     # add NR data
-    nrDict = GetNRdict()
+    nrDict = GetNRdict(baseDir=baseDir)
     for gname in gnames:
         if gname in nrDict:
             ringPA, a_ring, emax, ring_class = nrDict[gname]
