@@ -33,6 +33,8 @@ The following data files are included:
 
    * `table_nuclearrings.dat` -- Measurements of nuclear rings (Table 3 in the paper)
 
+   * `table_unbarred_info.dat` -- Minimal data for unbarred galaxies in parent sample
+
 
 ## Dependencies
 
@@ -47,7 +49,7 @@ all of which are available on PyPI and can be installed via `pip`:
 
 There are XXX Jupyter notebooks:
 
-   * `XXX.ipynb` -- Python notebook; generates the figures for 
+   * `figures_for_paper.ipynb` -- Python notebook; generates the figures for 
    the paper
 
 
