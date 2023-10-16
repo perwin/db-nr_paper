@@ -246,9 +246,10 @@ def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     filePath = baseDir + "/" + fname
     
     lines = open(filePath).readlines()
-    dlines = lines[30:]
+    dlines = lines[31:]
     
     gnames = []
+    htypes = []
     distances = []
     logmstars  = []
     diskPAs = []
@@ -272,32 +273,33 @@ def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     amax2_dp_kpcs = []
     nr_dp_kpcs = []
     gname_rowdict = {}
-
     i = 0
     for line in dlines:
         gname = MungeName(line[:9])
         gname_rowdict[gname] = i
-        dist = float(line[38:42])
-        logmstar = float(line[50:55])
-        diskPA = float(line[57:60])
-        inc = float(line[63:65])
-        barPA = float(line[68:71])
-        amax = float(line[73:76])
-        lbar = float(line[78:81])
-        emax = float(line[83:87])
-        dbStatus = line[88:89]
+        T = int(line[37:39])
+        dist = float(line[42:46])
+        logmstar = float(line[54:59])
+        diskPA = float(line[61:64])
+        inc = float(line[67:70])
+        barPA = float(line[72:75])
+        amax = float(line[77:80])
+        lbar = float(line[82:85])
+        emax = float(line[87:91])
+        dbStatus = line[92:93]
         if dbStatus.strip() == "Y":
             dbFlags.append(True)
         else:
             dbFlags.append(False)
-        nrStatus = line[90:91]
+        nrStatus = line[94:95]
         if nrStatus.strip() == "Y":
             nrFlags.append(True)
         else:
             nrFlags.append(False)
-        fwhms.append(float(line[92:96]))
+        fwhms.append(float(line[96:100]))
         
         gnames.append(gname)
+        htypes.append(T)
         distances.append(dist)
         logmstars.append(logmstar)
         diskPAs.append(diskPA)
@@ -340,12 +342,12 @@ def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     nr_dp_kpcs = DeprojectSizes_kpc(nrAmaxs, nrPAs, diskPAs, incs, distances)
     
     # assemble output data frame
-    dataList = [ np.array(gnames), np.array(distances), np.array(logmstars),
+    dataList = [ np.array(gnames), np.array(distances), np.array(htypes), np.array(logmstars),
                 np.array(diskPAs), np.array(incs), np.array(barPAs), np.array(amaxs), 
                 np.array(lbars), np.array(emaxs), np.array(dbFlags), np.array(nrFlags), 
                 np.array(amax_dp_kpcs), np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs),
                 np.array(ringClasses) ]
-    colNames = ["name", "dist", "logmstar", "diskPA", "inclination", "barPA", "amax",
+    colNames = ["name", "dist", "T", "logmstar", "diskPA", "inclination", "barPA", "amax",
                 "Lbar", "emax", "dbFlag", "nrFlag", "amax_dp_kpc", "amax2_dp_kpc", 
                 "nr_dp_kpc", "nr_class"]    
     df = du.ListDataFrame(dataList, colNames)
