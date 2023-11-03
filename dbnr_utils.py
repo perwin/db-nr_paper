@@ -70,6 +70,58 @@ def deprojectr( deltaPA: float, inclination: float, r: float ) -> float:
     return ( scale * r )
 
 
+def RectifyPA( angle: float, maxAngle: float ) -> float:
+    """Convert angle to lie between [0,maxAngle) degrees.
+    (i.e., angle can be >=0, but must be < maxAngle)
+
+        For maxAngle = 360, this just does standard modular arithmetic
+        on angles, mapping the angle into [0,360]
+        For maxAngle = 180, this maps the angle into [0,180), assuming
+        m = 2 symmetry
+        For max = 90, this assumes m=4 symmetry (so -30 --> 60, which
+        may not be what you are expecting)
+    """
+    # map angle into [0,360], in case it's < 0 or > 360 to start with
+    angle = angle % 360
+    while (angle >= maxAngle):
+        angle -= maxAngle
+    return angle
+
+
+def deprojectpa( deltaPA: float, inclination: float ) -> float:
+    """Function to calculate a deprojected position angle, given an input
+    observed position angle (*relative to disk line-of-nodes*, *not*
+    straight position angle east of north!) and an input inclination, both
+    in degrees.  Returns the deprojected position angle, relative to disk
+    line-of-nodes, in degrees."""
+
+    deltaPA_rad = np.radians(deltaPA)
+    i_rad = np.radians(inclination)
+    deltaPA_deproj = math.atan( math.tan(deltaPA_rad) / math.cos(i_rad) )
+    return np.degrees(deltaPA_deproj)
+
+
+def deprojectpa_abs( obsPA: float, diskPA: float, inclination: float, 
+                    symmetric=True ) -> float:
+    """Function to calculate deprojected PA on the sky of a structure, as
+    if the galaxy were rotated to face-on orientation.
+        obsPA = observed (projected) PA of structure
+        diskPA = major axis (line of nodes) of disk
+        inclination = inclination of disk (0 = face-on).
+    If symmetric=True, then values > 180 are converted to the equivalent
+    0--180 values."""
+
+    if (inclination == 0.0):
+        dPA = obsPA
+    else:
+        deltaPA = obsPA - diskPA
+        deltaPA_dp = deprojectpa(deltaPA, inclination)
+        dPA = deltaPA_dp + diskPA
+    if symmetric:
+        dPA = RectifyPA(dPA, 180.0)
+    return dPA
+
+
 def kpc_per_arcsec( distMpc ):
     """
     Given an (angular-diameter) distance in Mpc, returns kpc/arcsec scale.
@@ -344,11 +396,11 @@ def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     # assemble output data frame
     dataList = [ np.array(gnames), np.array(distances), np.array(htypes), np.array(logmstars),
                 np.array(diskPAs), np.array(incs), np.array(barPAs), np.array(amaxs), 
-                np.array(lbars), np.array(emaxs), np.array(dbFlags), np.array(nrFlags), 
-                np.array(amax_dp_kpcs), np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs),
-                np.array(ringClasses) ]
+                np.array(lbars), np.array(emaxs), np.array(dbFlags), np.array(nrFlags),
+                np.array(innerBarPAs), np.array(amax_dp_kpcs), np.array(amax2_dp_kpcs), 
+                np.array(nr_dp_kpcs), np.array(ringClasses) ]
     colNames = ["name", "dist", "T", "logmstar", "diskPA", "inclination", "barPA", "amax",
-                "Lbar", "emax", "dbFlag", "nrFlag", "amax_dp_kpc", "amax2_dp_kpc", 
+                "Lbar", "emax", "dbFlag", "nrFlag", "bar2PA", "amax_dp_kpc", "amax2_dp_kpc", 
                 "nr_dp_kpc", "nr_class"]    
     df = du.ListDataFrame(dataList, colNames)
     
