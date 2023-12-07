@@ -22,7 +22,7 @@ Left: fractions of S0-Sd galaxies with inner bars (black squares) or nuclear rin
 (bottom; red circles = fraction of galaxies with bars).
 Right: Trends in bar semi-major axis versus galaxy stellar mass.
 
-<!-- [![DOI](https://zenodo.org/badge/579425923.svg)](https://zenodo.org/badge/latestdoi/579425923) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10252783.svg)](https://doi.org/10.5281/zenodo.10252783)
 
 
 
