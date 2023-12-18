@@ -55,10 +55,13 @@ all of which are available on PyPI and can be installed via `pip`:
 
 ## Jupyter Notebooks
 
-There is one Jupyter notebook:
+There are two Jupyter notebooks:
 
    * `figures_for_paper.ipynb` -- Python notebook; generates the figures for 
    the paper
+
+   * `fits_for_paper.ipynb` -- Python notebook; computes best-fit parameters, AIC
+   values, uncertainties for various fits
 
 
 
