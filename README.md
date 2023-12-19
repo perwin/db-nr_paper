@@ -4,15 +4,7 @@ This git repository contains data files, Python code, and Python Jupyter
 notebooks which can be used to reproduce figures and analyses from the
 paper "The Frequency and Sizes of Inner Bars and Nuclear Rings in Barred
 Galaxies and Their Dependence on Galaxy Properties" (Erwin, 2023,
-*Monthly Notices of the Royal Astronomical Society*, submitted).
-
-<!-- 
-This git repository contains data files, Python code, and Python and R 
-Jupyter notebooks which can be used to reproduce figures and analyses
-from the paper "The Profiles of Bars in Barred Galaxies" (Erwin,
-Debattista, & Anderson 2023, *Monthly Notices of the Royal Astronomical
-Society*, in press).
- -->
+*Monthly Notices of the Royal Astronomical Society*, in press).
 
 
 ![Trends](./composite_fig_for_github.png)
@@ -67,8 +59,8 @@ There are two Jupyter notebooks:
 
 ## Python Code
 
-   * `datautils.py`, `dbnr_utils.py`, `plotutils.py` -- miscellaneous utility functions
-   for reading data tables and generating figures.
+   * `datautils.py`, `dbnr_utils.py`, `fitting_barsizes.py`, `plotutils.py` -- miscellaneous 
+   utility functions for reading data tables, performing fits, and generating figures.
    
 
 
@@ -84,6 +76,10 @@ if you want the PDF files to actually be generated (the default is `False`, whic
 means the figures will appear in the notebook but won't be saved to disk).
 
 3. Run the notebook `figures_for_paper.ipynb` to generate the figures.
+
+4. Run the notebook `fits_for_paper.ipynb` if you wish to do the fits for inner-bar
+and nuclear-ring sizes as functions of galaxy stellar mass and/or outer/main bar size.
+
 
 
 ## Licensing
