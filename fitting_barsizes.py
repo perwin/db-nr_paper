@@ -2,7 +2,7 @@
 
 import numpy as np
 from scipy.optimize import curve_fit
-import astrostat
+import dbnr_utils
 
 
 
@@ -62,18 +62,15 @@ def fbrokenlin( x, a1, b1, x_brk, b2 ):
     return np.array(yy)
 
 
-def fmulti_lin_brokenlin_old( X, a, b, a1, b1, x_brk, b2 ):
-    """Composite function which add linear fit (a, b) to broken-linear
-    fit (rest of parameters)
+def fmulti_lin( X, a, b1, b2 ):
+    """Composite function which adds linear fit (a, b1) to second linear fit (a,b2)
 
-	*** THIS IS THE OLDER, INCORRECT VERSION *** 
-	
     Parameters
     ----------
     X : tuple of x1, x2 
         x1 : 1D numpy array of predictor using linear fit (e.g., log R_e)
         x2 : 1D numpy array of predictor using broken-linear fit (e.g., log M_star)
-    a, b, a1, b1, x_brk, b2 : float
+    a, b1, b2 : float
         parameters for the model
 
     Returns
@@ -82,24 +79,18 @@ def fmulti_lin_brokenlin_old( X, a, b, a1, b1, x_brk, b2 ):
         array of y values
     
     The model is
-        y = a + b*x1 + a1 + b1*x2   for x < x_brk
-        y = a + b*x1 + a2 + b2*x2   for x > x_brk
-    Note that a2 is computed from the other parameters
+        y = a1 + b1*x1 + b2*x2
     """
     # unpack the two independent variables
     # e.g., x1 = log(R_e), x2 = log(M_star)
     x1,x2 = X
     
-    a2 = a1 + (b1 - b2)*x_brk
     npts = len(x1)
     yy = []
     for i in range(npts):
         x1_i = x1[i]
         x2_i = x2[i]
-        if x2_i < x_brk:
-            y_i = a + b*x1_i + a1 + b1*x2_i
-        else:
-            y_i = a + b*x1_i + a2 + b2*x2_i
+        y_i = a + b1*x1_i + b2*x2_i
         yy.append(y_i)
     return np.array(yy)
 
@@ -284,7 +275,7 @@ def DoFit( x, y, errs, ii, p0, mode="linear", doPrint=True ):
         initialparameter values for the model
     mode : str
         specifies which model to fit to the data
-        One of ["linear", "broken-linear", "composite", "binary"]
+        One of ["linear", "multi-linear", "broken-linear", "composite", "binary"]
     doPrint : bool
         If True, the best-fitting parameter values and the corresponding AIC
         are printed at the end of the fit
@@ -301,6 +292,12 @@ def DoFit( x, y, errs, ii, p0, mode="linear", doPrint=True ):
     elif mode == "broken-linear":
         func = fbrokenlin
         xx = x[ii]
+    elif mode == "multi-linear":
+        func = fmulti_lin
+        xx1,xx2 = x
+        xx1_sub = xx1[ii]
+        xx2_sub = xx2[ii]
+        xx = [xx1_sub,xx2_sub]
     elif mode == "composite":
         func = fmulti_lin_brokenlin
         xx1,xx2 = x
@@ -320,7 +317,7 @@ def DoFit( x, y, errs, ii, p0, mode="linear", doPrint=True ):
     
     pp, pcov = curve_fit(func, xx, yy, p0=p0, sigma=ee)
     ll = logLikelihood(xx, yy, ee, func, pp)
-    aic = astrostat.AICc(ll, nParams, len(xx))
+    aic = dbnr_utils.AICc(ll, nParams, len(xx))
     
     if doPrint:
         PrintParams(pp, "   ", mode)
@@ -369,6 +366,12 @@ def ParameterUncertainties( x, y, errs, ii, p0, mode="linear", nIterations=100 )
     elif mode == "broken-linear":
         func = fbrokenlin
         xx = x[ii]
+    elif mode == "multi-linear":
+        func = fmulti_lin
+        xx1,xx2 = x
+        xx1_sub = xx1[ii]
+        xx2_sub = xx2[ii]
+        xx = [xx1_sub,xx2_sub]
     elif mode == "composite":
         func = fmulti_lin_brokenlin
         xx1,xx2 = x
@@ -381,6 +384,9 @@ def ParameterUncertainties( x, y, errs, ii, p0, mode="linear", nIterations=100 )
         xx1_sub = xx1[ii]
         xx2_sub = xx2[ii]
         xx = [xx1_sub,xx2_sub]
+    else:
+        print("ERROR: unrecognized mode \"{0}\"!".format(mode))
+        return None
     yy = y[ii]
     if errs is not None:
         ee = errs[ii]
@@ -415,7 +421,7 @@ def ParameterUncertainties( x, y, errs, ii, p0, mode="linear", nIterations=100 )
 
     paramIntervals = []
     for i in range(nParams):
-        paramIntervals.append(astrostat.ConfidenceInterval(paramsArray[i]))
+        paramIntervals.append(dbnr_utils.ConfidenceInterval(paramsArray[i]))
     
     if nFailed > 0:
         print("\tParameterUncertainties: %d failed iterations" % nFailed)

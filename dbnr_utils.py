@@ -17,6 +17,8 @@ ONESIGMA_UPPER = 0.8415
 # conversion factor: kpc/arcsec for distance of 1 Mpc
 k_kpcperarcsec = 1.0e3 / 206265.0 
 
+MIN_INC = 26    # minimum inclination to apply deprojections for
+
 
 # location of data files
 baseDir_pub = "/Users/erwin/Documents/Working/Papers/Paper-extended-wiyn-survey/public/"
@@ -35,6 +37,30 @@ def Read2ColumnProfile( fname ):
 	x = [float(line.split()[0]) for line in dlines]
 	y = [float(line.split()[1]) for line in dlines]
 	return np.array(x), np.array(y)
+
+
+
+def DiffAngle( angle1, angle2, rotationCode, diskPA = -1, i = 0):
+    """
+    Calculates angle between two components, with positive =
+    first component *leads* second.  rotationCode = 1 for
+    counter-clockwise rotation, -1 for clockwise.
+    """
+
+    # Correct for inclination, if requested:
+    if (diskPA >= 0) and (i >= MIN_INC):
+        angle1 = deprojectpa(angle1 - diskPA, i) + diskPA
+        angle2 = deprojectpa(angle2 - diskPA, i) + diskPA
+    if (angle1 >= angle2):
+        delPA = angle1 - angle2
+        if delPA > 90:
+            delPA = -(180 - delPA)
+    else:
+        delPA = angle2 - angle1
+        if delPA > 90:
+            delPA = -(180 - delPA)
+        delPA = -delPA   # if component2 is leading, then comp1 is trailing
+    return delPA * rotationCode
 
 
 
@@ -269,7 +295,13 @@ def DeprojectSizes_kpc( objectSizes, objectPAs, diskPAs, inclinations, distances
     sizes_dp_kpc = [ kpc_scales[i] * deprojectr(objectPAs[i] - diskPAs[i], 
                         inclinations[i], objectSizes[i]) for i in range(nObjs) ]
     return sizes_dp_kpc
-    
+
+
+def ConvertToParsecs( objectSizes, distances ):
+    nObjs = len(objectSizes)
+    pc_scales = [ 1e3 * kpc_per_arcsec(distances[i]) for i in range(nObjs) ]
+    sizes_pc = [ pc_scales[i] * objectSizes[i] for i in range(nObjs) ]
+    return sizes_pc
 
 
 def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
@@ -395,16 +427,18 @@ def GetBarredGalaxyData( fname="table_mainsample.dat", baseDir="" ):
     amax_dp_kpcs = DeprojectSizes_kpc(amaxs, barPAs, diskPAs, incs, distances)
     amax2_dp_kpcs = DeprojectSizes_kpc(innerBarAmaxs, innerBarPAs, diskPAs, incs, distances)
     nr_dp_kpcs = DeprojectSizes_kpc(nrAmaxs, nrPAs, diskPAs, incs, distances)
+    fwhm_pcs = ConvertToParsecs(fwhms, distances)
     
     # assemble output data frame
     dataList = [ np.array(gnames), np.array(distances), np.array(htypes), np.array(logmstars),
                 np.array(diskPAs), np.array(incs), np.array(rotCodes), np.array(barPAs), 
                 np.array(amaxs), np.array(lbars), np.array(emaxs), np.array(dbFlags), 
                 np.array(nrFlags), np.array(innerBarPAs), np.array(amax_dp_kpcs), 
-                np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs), np.array(ringClasses) ]
+                np.array(amax2_dp_kpcs), np.array(nr_dp_kpcs), np.array(ringClasses), 
+                np.array(fwhm_pcs) ]
     colNames = ["name", "dist", "T", "logmstar", "diskPA", "inclination", "rotCode", "barPA", 
                 "amax", "Lbar", "emax", "dbFlag", "nrFlag", "bar2PA", "amax_dp_kpc", 
-                "amax2_dp_kpc", "nr_dp_kpc", "nr_class"]    
+                "amax2_dp_kpc", "nr_dp_kpc", "nr_class", "fwhm_pc"]    
     df = du.ListDataFrame(dataList, colNames)
     
     return (df, gname_rowdict)
