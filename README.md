@@ -1,10 +1,11 @@
 # Public data, code, and notebooks for paper analyzing inner bars and nuclear rings
 
-This git repository contains data files, Python code, and Python Jupyter
-notebooks which can be used to reproduce figures and analyses from the
-paper "The Frequency and Sizes of Inner Bars and Nuclear Rings in Barred
-Galaxies and Their Dependence on Galaxy Properties" (Erwin, 2023,
-*Monthly Notices of the Royal Astronomical Society*, in press).
+This git repository contains data files, Python code, and Jupyter
+notebooks (for Python and R) which can be used to reproduce figures and
+analyses from the paper "The Frequency and Sizes of Inner Bars and
+Nuclear Rings in Barred Galaxies and Their Dependence on Galaxy
+Properties" (Erwin, 2023, *Monthly Notices of the Royal Astronomical
+Society*, in press).
 
 
 ![Trends](./composite_fig_for_github.png)
@@ -34,7 +35,7 @@ The following data files are included:
    * `table_unbarred_info.dat` -- Minimal data for unbarred galaxies in parent sample
 
    * `s4gbars_table.dat` -- data for 1322 individual galaxies in the Parent Disc Sample
-   of Erwin (2018; used for Figs. 9 and 10).
+   of Erwin (2018; used for Figs. 9 and 10)
 
 
 ## Dependencies
@@ -81,6 +82,10 @@ means the figures will appear in the notebook but won't be saved to disk).
 
 4. Run the notebook `fits_for_paper.ipynb` if you wish to do the fits for inner-bar
 and nuclear-ring sizes as functions of galaxy stellar mass and/or outer/main bar size.
+
+5. Run the notebook `logistic_fits_r.ipynb` if you wish to do the logistic regression
+for inner-bar and nuclear-ring presence as functions of galaxy stellar mass and/or 
+outer/main bar size.
 
 
 
