@@ -5,7 +5,7 @@ notebooks (for Python and R) which can be used to reproduce figures and
 analyses from the paper "The Frequency and Sizes of Inner Bars and
 Nuclear Rings in Barred Galaxies and Their Dependence on Galaxy
 Properties" (Erwin, 2023, *Monthly Notices of the Royal Astronomical
-Society*, in press).
+Society*, in press; [arXiv:2312.12893](http://arxiv.org/abs/2312.12893)).
 
 
 ![Trends](./composite_fig_for_github.png)
